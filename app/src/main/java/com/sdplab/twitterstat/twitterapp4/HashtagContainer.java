@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class HashtagContainer {
 
-    private ArrayList tagList;
+    private ArrayList<String> tagList;
 
     private static HashtagContainer instance;
 
@@ -25,6 +25,10 @@ public class HashtagContainer {
 
     public void addTag(String tag){
         tagList.add(tag);
+    }
+
+    public ArrayList<String> getTagList(){
+        return tagList;
     }
 
 }
