@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddHashActivity extends AppCompatActivity implements View.OnClickListener {
@@ -21,6 +22,7 @@ public class AddHashActivity extends AppCompatActivity implements View.OnClickLi
         one.setOnClickListener(this);
         etOne = findViewById(R.id.editText1);
         hc = HashtagContainer.getInstance();
+        refresh();
     }
 
     @Override
@@ -34,8 +36,17 @@ public class AddHashActivity extends AppCompatActivity implements View.OnClickLi
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(context, text, duration).show();
                 etOne.setText("");
+                refresh();
                 break;
 
+        }
+    }
+
+    private void refresh(){
+        TextView tv1 = findViewById(R.id.textView3);
+        tv1.setText("");
+        for(String s:hc.getTagList()){
+            tv1.append(s+"\n");
         }
     }
 

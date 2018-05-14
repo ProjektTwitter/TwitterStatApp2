@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import twitter4j.Query;
@@ -23,24 +24,21 @@ public class ShowTwittsActivity extends AppCompatActivity {
         dt.execute();
     }
 
-    private void runDowmlad(){
-        ;
-    }
 
-    private class DownloadingTwitts extends AsyncTask<Void , Void, List<twitter4j.Status>>{
+    private class DownloadingTwitts extends AsyncTask<Void , Void, ArrayList<List<twitter4j.Status>>>{
 
 
         @Override
-        protected List<twitter4j.Status> doInBackground(Void...voids) {
+        protected ArrayList<List<twitter4j.Status>>  doInBackground(Void...voids) {
             Twitter twitt = (Twitter) getIntent().getSerializableExtra("Twitter");
-            List<twitter4j.Status> status = null;
+            ArrayList<List<twitter4j.Status>> status = new ArrayList<List<twitter4j.Status>>();
             Query query;
             QueryResult result;
             for(String q: HashtagContainer.getInstance().getTagList()){
                 query = new Query(q);
                 try {
                     result = twitt.search(query);
-                    status = result.getTweets();
+                    status.add(result.getTweets());
                 } catch (TwitterException e) {
                     e.printStackTrace();
                 }
@@ -49,13 +47,14 @@ public class ShowTwittsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(List<twitter4j.Status> status) {
+        protected void onPostExecute(ArrayList<List<twitter4j.Status>> status) {
             TextView tv1 = findViewById(R.id.textView2);
-
-            for (twitter4j.Status s : status) {
-                tv1.append(s.getUser().getName()+"\n");
-                tv1.append(s.getText()+"\n");
-                tv1.append("\n");
+            for (List<twitter4j.Status>sl : status) {
+                for (twitter4j.Status s : sl) {
+                    tv1.append(s.getUser().getName() + "\n");
+                    tv1.append(s.getText() + "\n");
+                    tv1.append("\n");
+                }
             }
         }
 
