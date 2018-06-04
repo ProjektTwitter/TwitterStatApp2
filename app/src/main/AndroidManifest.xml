@@ -3,6 +3,8 @@
     package="com.sdplab.twitterstat.twitterapp4">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +22,27 @@
         </activity>
         <activity android:name=".AddHashActivity" />
         <activity android:name=".ShowTwittsActivity" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+
+        <service
+            android:name=".TwitterIntentService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".TwitterServiceRestarterBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped">
+            <intent-filter>
+                <action android:name=".TwitterServiceRestarterBroadcastReceiver"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".TwitterService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

@@ -1,8 +1,11 @@
 package com.sdplab.twitterstat.twitterapp4;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -15,6 +18,9 @@ import twitter4j.conf.ConfigurationBuilder;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static Twitter twitt;
+    private static final String TAG = "mainActivity";
+    private TwitterService mTwitterService;
+    Intent mServiceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +28,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Button one = findViewById(R.id.button1);
         Button two = findViewById(R.id.button2);
+        Button three = findViewById(R.id.button3);
         one.setOnClickListener(this);
         two.setOnClickListener(this);
+        three.setOnClickListener(this);
+        mTwitterService = new TwitterService(this);
         ConfigurationBuilder cb = new ConfigurationBuilder();
         connectToAPI(cb);
     }
@@ -40,7 +49,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startShowTwittsActivity();
                 break;
 
+            case R.id.button3:
+                startTwitterService();
+                break;
         }
+    }
+
+    private void startTwitterService(){
+        mServiceIntent = new Intent(this, mTwitterService.getClass());
+        if (!isMyServiceRunning(mTwitterService.getClass())) {
+            startService(mServiceIntent);
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("isMyServiceRunning?", true+"");
+                return true;
+            }
+        }
+        Log.i ("isMyServiceRunning?", false+"");
+        return false;
     }
 
     private void startAddHashActivity(){
@@ -61,6 +92,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .setOAuthAccessTokenSecret(Constants.accessSecret);
         TwitterFactory tfactory = new TwitterFactory(cb.build());
         twitt = tfactory.getInstance();
+    }
+
+
+    protected void onDestroy() {
+        stopService(mServiceIntent);
+        Log.i("MAINACT", "onDestroy!");
+        super.onDestroy();
+
     }
 
 }

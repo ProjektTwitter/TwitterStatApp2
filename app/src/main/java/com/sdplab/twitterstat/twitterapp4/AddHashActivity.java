@@ -7,8 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class AddHashActivity extends AppCompatActivity implements View.OnClickListener {
@@ -46,10 +50,29 @@ public class AddHashActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void refresh(){
-        TextView tv1 = findViewById(R.id.textView3);
-        tv1.setText("");
-        for(String s:hc.getTagList()){
-            tv1.append(s+"\n");
+        LinearLayout ll = findViewById(R.id.linearLayout);
+        ArrayList<Button> blist = new ArrayList<>();
+        for(int i = 0; i < hc.getTagList().size(); i++){
+            for(Button b :blist){
+                b.setVisibility(View.GONE);
+            }
+            LinearLayout l = new LinearLayout(this);
+            l.setId(i);
+            l.setOrientation(LinearLayout.HORIZONTAL);
+            l.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+            TextView tv = new TextView(this);
+            Button b = new Button(this);
+            tv.setText(hc.getTagList().get(i));
+            tv.setId(i);
+            tv.setGravity(LinearLayout.FOCUS_LEFT);
+            b.setText("X");
+            b.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            b.setGravity(LinearLayout.FOCUS_RIGHT);
+            b.setId(i);
+            blist.add(b);
+            l.addView(tv);
+            l.addView(b);
+            ll.addView(l);
         }
     }
 
