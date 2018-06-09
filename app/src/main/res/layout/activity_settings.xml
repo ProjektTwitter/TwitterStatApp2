@@ -24,17 +24,6 @@
             tools:paddingLeft="10dp"
             tools:paddingTop="10dp" />
 
-        <RadioButton
-            android:id="@+id/radioButton3"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:text="RadioButton" />
-
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="match_parent"
-            android:layout_height="48dp" />
-
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
