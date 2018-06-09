@@ -29,9 +29,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button one = findViewById(R.id.button1);
         Button two = findViewById(R.id.button2);
         Button three = findViewById(R.id.button3);
+        Button four = findViewById(R.id.button4);
         one.setOnClickListener(this);
         two.setOnClickListener(this);
         three.setOnClickListener(this);
+        four.setOnClickListener(this);
         mTwitterService = new TwitterService(this);
         ConfigurationBuilder cb = new ConfigurationBuilder();
         connectToAPI(cb);
@@ -52,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button3:
                 startTwitterService();
                 break;
+
+            case R.id.button4:
+                startSettingsActivity();
+                break;
+
+
         }
     }
 
@@ -82,6 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void startShowTwittsActivity(){
         Intent intent = new Intent(this, ShowTwittsActivity.class);
         intent.putExtra("Twitter", twitt);
+        startActivity(intent);
+    }
+
+    private void startSettingsActivity(){
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
