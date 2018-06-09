@@ -6,9 +6,11 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.Timer;
@@ -29,6 +31,9 @@ public class TwitterService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String fSettings = sharedPref.getString("list_preference_1", "");
+        System.out.println(fSettings);
         startTimer();
         return START_STICKY;
     }
