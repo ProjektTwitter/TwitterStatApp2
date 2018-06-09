@@ -24,6 +24,11 @@
             tools:paddingLeft="10dp"
             tools:paddingTop="10dp" />
 
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
