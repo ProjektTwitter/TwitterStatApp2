@@ -3,6 +3,7 @@ package com.sdplab.twitterstat.twitterapp4;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +50,7 @@ public class AddHashActivity extends AppCompatActivity implements View.OnClickLi
                 hc.addTag(String.valueOf(etOne.getText()));
                 Context context = getApplicationContext();
                 CharSequence text = "Hashtag added successfuly";
+                Log.i("Adding","Hashtag added");
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(context, text, duration).show();
                 etOne.setText("#");
