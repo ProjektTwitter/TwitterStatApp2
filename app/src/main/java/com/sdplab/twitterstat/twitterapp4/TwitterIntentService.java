@@ -50,11 +50,10 @@ public class TwitterIntentService extends IntentService {
     }
 
     private void processDeleteNotification(Intent intent) {
-        // Log something?
+
     }
 
     private void processStartNotification() {
-        // Do something. For example, fetch fresh data from backend to create a rich notification?
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle("Scheduled Notification")

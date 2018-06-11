@@ -11,6 +11,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeChanger.setUpTheme(this);
         setContentView(R.layout.activity_settings);
         if (savedInstanceState == null) {
             Fragment preferenceFragment = new SettingsFragment();
@@ -18,6 +19,15 @@ public class SettingsActivity extends AppCompatActivity {
             ft.add(R.id.prefLayout, preferenceFragment);
             ft.commit();
         }
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(SettingsFragment.ThemeChanged)
+
+            recreate();
 
     }
 

@@ -18,7 +18,7 @@ import java.util.TimerTask;
 
 public class TwitterService extends Service {
 
-    public int counter=0;
+    public static boolean isRunning = false;
 
     public TwitterService(Context applicationContext) {
         super();
@@ -28,11 +28,44 @@ public class TwitterService extends Service {
     public TwitterService() {
     }
 
+    private int freq = 900000;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+        isRunning = true;
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String fSettings = sharedPref.getString("list_preference_1", "");
+        switch(fSettings){
+
+            case "15 minutes":
+                freq = 900000;
+                break;
+
+            case "30 minutes":
+                freq = 1800000;
+                break;
+
+            case "1 hour":
+                freq = 3200000;
+                break;
+
+            case "3 hours":
+                freq = 9600000;
+                break;
+
+            case "6 hours":
+                freq = 19200000;
+                break;
+
+            case "12 hours":
+                freq = 28400000;
+                break;
+
+            case "24 hours":
+                freq = 56800000;
+                break;
+        }
         System.out.println(fSettings);
         startTimer();
         return START_STICKY;
@@ -54,8 +87,8 @@ public class TwitterService extends Service {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_markunread)
-                .setContentTitle("My notification")
-                .setContentText("Hello World!")
+                .setContentTitle("We got new twitts for you!")
+                .setContentText("Click to see the list of twitts")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
@@ -69,16 +102,12 @@ public class TwitterService extends Service {
 
     private Timer timer;
     private TimerTask timerTask;
-    long oldTime=0;
     public void startTimer() {
-        //set a new Timer
         timer = new Timer();
 
-        //initialize the TimerTask's job
         initializeTimerTask();
 
-        //schedule the timer, to wake up every 1 second
-        timer.schedule(timerTask, 1000, 10000); //
+        timer.schedule(timerTask, 1000, freq); //
     }
 
     public void initializeTimerTask() {
@@ -91,7 +120,7 @@ public class TwitterService extends Service {
     }
 
     public void stoptimertask() {
-        //stop the timer, if it's not already null
+
         if (timer != null) {
             timer.cancel();
             timer = null;

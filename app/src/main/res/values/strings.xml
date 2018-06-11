@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TwitterApp4</string>
+    <string name="app_name">TwitterStatApp</string>
     <string name="title_activity_settings2">Settings</string>
 
     <!-- Strings related to Settings -->

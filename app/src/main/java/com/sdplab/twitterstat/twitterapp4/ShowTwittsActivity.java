@@ -19,11 +19,19 @@ public class ShowTwittsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeChanger.setUpTheme(this);
         setContentView(R.layout.activity_show_twitts);
         DownloadingTwitts dt = new DownloadingTwitts();
         dt.execute();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(SettingsFragment.ThemeChanged)
+
+            recreate();
+    }
 
     private class DownloadingTwitts extends AsyncTask<Void , Void, ArrayList<List<twitter4j.Status>>>{
 

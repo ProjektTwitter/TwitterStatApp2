@@ -30,6 +30,7 @@ public class AddHashActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ThemeChanger.setUpTheme(this);
         setContentView(R.layout.activity_add_hash);
         Button one = findViewById(R.id.button_add);
         one.setOnClickListener(this);
@@ -103,6 +104,14 @@ public class AddHashActivity extends AppCompatActivity implements View.OnClickLi
             l.addView(b);
             ll.addView(l);
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(SettingsFragment.ThemeChanged)
+
+            recreate();
     }
 
 }
