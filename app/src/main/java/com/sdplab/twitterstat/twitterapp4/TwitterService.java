@@ -7,28 +7,40 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+
 public class TwitterService extends Service {
 
-    public static boolean isRunning = false;
+
 
     public TwitterService(Context applicationContext) {
         super();
         Log.i("TwitterService", "service initialized");
     }
 
-    public TwitterService() {
-    }
+    public TwitterService() {}
 
+    public static boolean isRunning = false;
     private int freq = 900000;
+    private Timer timer;
+    private TimerTask timerTask;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -74,10 +86,16 @@ public class TwitterService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("EXIT", "ondestroy!");
-        Intent broadcastIntent = new Intent(".TwitterServiceRestarterBroadcastReceiver");
-        sendBroadcast(broadcastIntent);
-        stoptimertask();
+        if(SettingsFragment.killTwitterService){
+            stoptimertask();
+            Log.i("EXIT", "killing!");
+        }
+        else {
+            Log.i("EXIT", "reviving!");
+            Intent broadcastIntent = new Intent(".TwitterServiceRestarterBroadcastReceiver");
+            sendBroadcast(broadcastIntent);
+            stoptimertask();
+        }
     }
 
     public void setUpNotification(){
@@ -90,7 +108,6 @@ public class TwitterService extends Service {
                 .setContentTitle("We got new twitts for you!")
                 .setContentText("Click to see the list of twitts")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
@@ -100,8 +117,6 @@ public class TwitterService extends Service {
 
     }
 
-    private Timer timer;
-    private TimerTask timerTask;
     public void startTimer() {
         timer = new Timer();
 
@@ -134,4 +149,5 @@ public class TwitterService extends Service {
         return null;
 
     }
+
 }

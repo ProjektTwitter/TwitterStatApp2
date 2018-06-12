@@ -109,7 +109,7 @@ public class AddHashActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(SettingsFragment.ThemeChanged)
+        if(SettingsFragment.themeChanged)
 
             recreate();
     }

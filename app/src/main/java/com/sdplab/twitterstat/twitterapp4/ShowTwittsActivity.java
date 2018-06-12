@@ -28,7 +28,7 @@ public class ShowTwittsActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(SettingsFragment.ThemeChanged)
+        if(SettingsFragment.themeChanged)
 
             recreate();
     }
@@ -61,6 +61,9 @@ public class ShowTwittsActivity extends AppCompatActivity {
                 for (twitter4j.Status s : sl) {
                     tv1.append(s.getUser().getName() + "\n");
                     tv1.append(s.getText() + "\n");
+                    tv1.append(s.getCreatedAt() + "\n");
+                    tv1.append(s.getFavoriteCount() + "\n");
+                    tv1.append(s.getRetweetCount() + "\n");
                     tv1.append("\n");
                 }
             }

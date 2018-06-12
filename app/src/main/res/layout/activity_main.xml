@@ -41,16 +41,16 @@
             android:text="Show Twitts" />
 
         <Button
-            android:id="@+id/button3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Start service" />
-
-        <Button
             android:id="@+id/button4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="SETTINGS" />
+
+        <Button
+            android:id="@+id/bStat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Statistics" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

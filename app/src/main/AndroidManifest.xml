@@ -24,11 +24,6 @@
         <activity android:name=".ShowTwittsActivity" />
         <activity android:name=".SettingsActivity" />
 
-        <service
-            android:name=".TwitterIntentService"
-            android:enabled="true"
-            android:exported="false" />
-
         <receiver
             android:name=".TwitterServiceRestarterBroadcastReceiver"
             android:enabled="true"
@@ -43,7 +38,12 @@
             android:name=".TwitterService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".TwittSaverService"
+            android:enabled="true"
+            android:exported="true" />
 
+        <activity android:name=".StatisticsActivity"></activity>
     </application>
 
 </manifest>

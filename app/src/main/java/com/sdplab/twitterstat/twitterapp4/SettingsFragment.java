@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
-    public static boolean ThemeChanged = false;
-    public static boolean FrequencyChanged = false;
-
+    public static boolean themeChanged = false;
+    public static boolean frequencyChanged = false;
+    public static boolean killTwitterService= false;
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
@@ -18,24 +18,35 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
             case "switch_preference_2":
 
-                ThemeChanged = true;
+                themeChanged = true;
                 getActivity().recreate();
                 break;
 
             case "switch_preference_1":
 
+                boolean result = sharedPreferences.getBoolean("switch_preference_1",false );
                 Intent intent1 = new Intent(getActivity(), TwitterService.class);
+
+                if(!result){
+
+                    killTwitterService = true;
+
+                }
+
                 if (!TwitterService.isRunning) {
                     getActivity().startService(intent1);
                 }
+
                 break;
+
+
 
             case "list_preference_1":
                 Intent intent2 = new Intent(getActivity(), TwitterService.class);
                 if (TwitterService.isRunning) {
                     getActivity().stopService(intent2);
                 }
-                FrequencyChanged = true;
+                frequencyChanged = true;
                 break;
 
         }

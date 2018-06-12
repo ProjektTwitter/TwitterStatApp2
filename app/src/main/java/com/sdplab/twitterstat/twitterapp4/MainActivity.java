@@ -31,14 +31,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Button one = findViewById(R.id.button1);
         Button two = findViewById(R.id.button2);
-        Button three = findViewById(R.id.button3);
         Button four = findViewById(R.id.button4);
+        Button three = findViewById(R.id.bStat);
         one.setOnClickListener(this);
         two.setOnClickListener(this);
         three.setOnClickListener(this);
         four.setOnClickListener(this);
         ConfigurationBuilder cb = new ConfigurationBuilder();
         connectToAPI(cb);
+        startTwittSaverService();
     }
 
     @Override
@@ -53,22 +54,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startShowTwittsActivity();
                 break;
 
-            case R.id.button3:
-                startTwitterService();
-                break;
-
             case R.id.button4:
                 startSettingsActivity();
                 break;
 
+            case R.id.bStat:
+                startStatistcsActivity();
+                break;
 
-        }
-    }
-
-    protected void startTwitterService(){
-        mServiceIntent = new Intent(this, TwitterService.class);
-        if (!TwitterService.isRunning) {
-            startService(mServiceIntent);
         }
     }
 
@@ -84,8 +77,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
+    private void startTwittSaverService(){
+        Intent intent = new Intent(this, TwittSaverService.class);
+        if(twitt==null){Log.i(TAG, "Twitter is nullem");}
+        intent.putExtra("Twitter", twitt);
+        this.startService(intent);
+    }
+
     private void startSettingsActivity(){
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void startStatistcsActivity(){
+        Intent intent = new Intent(this, StatisticsActivity.class);
         startActivity(intent);
     }
 
@@ -101,13 +106,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(SettingsFragment.ThemeChanged)
-
+        if(SettingsFragment.themeChanged)
             recreate();
     }
 
     protected void onDestroy() {
         super.onDestroy();
+        mServiceIntent = new Intent(this, TwitterService.class);
         if (TwitterService.isRunning) {
             stopService(mServiceIntent);
         }

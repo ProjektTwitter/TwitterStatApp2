@@ -25,7 +25,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(SettingsFragment.ThemeChanged)
+        if(SettingsFragment.themeChanged)
 
             recreate();
 
