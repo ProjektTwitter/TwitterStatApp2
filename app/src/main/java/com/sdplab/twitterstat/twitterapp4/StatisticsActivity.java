@@ -93,7 +93,7 @@ public class StatisticsActivity extends AppCompatActivity {
             BarChart barchart = findViewById(R.id.barGraph);
             ArrayList<String> users = new ArrayList<>();
             ArrayList<BarEntry> barEntries= new ArrayList<>();
-            BarDataSet entriesDataSet = new BarDataSet(barEntries,"Activity");
+
 
 
 
@@ -102,14 +102,13 @@ public class StatisticsActivity extends AppCompatActivity {
                 tvUserfreq.append(entry.getKey() + "/" + entry.getValue()+"\n");
             }
 
-            for (int i = 1;i<=5;i++){
-                String key = userFreq.keySet().iterator().next();
-                users.add(key);
-                barEntries.add(new BarEntry(userFreq.get(key),i));
+            for (int i = 0;i<5;i++){
+                barEntries.add(new BarEntry(i,userFreq.get(userFreq.keySet().toArray()[userFreq.size()-1])));
             }
+            BarDataSet entriesDataSet = new BarDataSet(barEntries,"Activity");
             BarData bd = new BarData (entriesDataSet);
             barchart.setData(bd);
-            //test6
+
         }
 
     }
