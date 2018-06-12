@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.ChartData;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.sdplab.twitterstat.database.AppDatabase;
 
 import java.util.ArrayList;
@@ -73,7 +78,7 @@ public class StatisticsActivity extends AppCompatActivity {
             Twitter twitt = (Twitter) getIntent().getSerializableExtra("Twitter");
             AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
             List<String> users = db.twittDao().getUsers();
-            Map<String,Integer> userFreq = new HashMap<>();
+            Map<String,Integer> userFreq = new LinkedHashMap<>();
             for(String u: users){
                 int occurrences = Collections.frequency(users, u);
                 userFreq.put(u,occurrences);
@@ -86,10 +91,25 @@ public class StatisticsActivity extends AppCompatActivity {
         protected void onPostExecute(Map<String,Integer> userFreq) {
             TextView tvUserfreq = findViewById(R.id.userFreq);
             BarChart barchart = findViewById(R.id.barGraph);
+            ArrayList<String> users = new ArrayList<>();
+            ArrayList<BarEntry> barEntries= new ArrayList<>();
+            BarDataSet entriesDataSet = new BarDataSet(barEntries,"Activity");
+
+
+
             for (Map.Entry<String, Integer> entry : userFreq.entrySet())
             {
                 tvUserfreq.append(entry.getKey() + "/" + entry.getValue()+"\n");
             }
+
+            for (int i = 1;i<=5;i++){
+                String key = userFreq.keySet().iterator().next();
+                users.add(key);
+                barEntries.add(new BarEntry(userFreq.get(key),i));
+            }
+            BarData bd = new BarData (entriesDataSet);
+            barchart.setData(bd);
+
         }
 
     }
