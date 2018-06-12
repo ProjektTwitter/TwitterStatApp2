@@ -109,7 +109,7 @@ public class StatisticsActivity extends AppCompatActivity {
             }
             BarData bd = new BarData (entriesDataSet);
             barchart.setData(bd);
-            //test2
+            //test3
         }
 
     }
