@@ -1,16 +1,22 @@
 package com.sdplab.twitterstat.twitterapp4;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.ChartData;
+import com.github.mikephil.charting.data.DataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sdplab.twitterstat.database.AppDatabase;
 
 import java.util.ArrayList;
@@ -91,7 +97,6 @@ public class StatisticsActivity extends AppCompatActivity {
         protected void onPostExecute(Map<String,Integer> userFreq) {
             TextView tvUserfreq = findViewById(R.id.userFreq);
             BarChart barchart = findViewById(R.id.barGraph);
-            ArrayList<String> users = new ArrayList<>();
             ArrayList<BarEntry> barEntries= new ArrayList<>();
 
 
@@ -101,16 +106,39 @@ public class StatisticsActivity extends AppCompatActivity {
             {
                 tvUserfreq.append(entry.getKey() + "/" + entry.getValue()+"\n");
             }
-
+            String[] users = new String[5];
             for (int i = 0;i<5;i++){
-                barEntries.add(new BarEntry(i,userFreq.get(userFreq.keySet().toArray()[userFreq.size()-1])));
+                users[i] = (String) userFreq.keySet().toArray()[i];
+                barEntries.add(new BarEntry(i,userFreq.get(userFreq.keySet().toArray()[i])));
             }
-            BarDataSet entriesDataSet = new BarDataSet(barEntries,"Activity");
+            BarDataSet entriesDataSet = new BarDataSet(barEntries,"Users");
+            entriesDataSet.setColors(ColorTemplate.PASTEL_COLORS);
             BarData bd = new BarData (entriesDataSet);
             barchart.setData(bd);
 
+            XAxis xAxis = barchart.getXAxis();
+            xAxis.setValueFormatter(new LabelValueFormatter(users));
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setGranularity(1);
+            xAxis.setDrawGridLines(false);
+
         }
 
+    }
+
+    public class LabelValueFormatter implements IAxisValueFormatter {
+
+        private String[] mValues;
+
+        public LabelValueFormatter(String[] values) {
+            this.mValues = values;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            // return the entry's data which represents the label
+            return mValues[(int)value];
+        }
     }
 
 
