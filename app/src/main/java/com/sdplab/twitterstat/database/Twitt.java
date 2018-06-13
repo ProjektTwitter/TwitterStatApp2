@@ -21,10 +21,10 @@ public class Twitt {
     @ColumnInfo(name = "date")
     private String date;
 
-    @ColumnInfo(name = "favorite count")
+    @ColumnInfo(name = "favorite_count")
     private int fcount;
 
-    @ColumnInfo(name = "retweet count")
+    @ColumnInfo(name = "retweet_count")
     private int rcount;
 
     public int getTid() {

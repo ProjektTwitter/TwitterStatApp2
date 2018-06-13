@@ -19,6 +19,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sdplab.twitterstat.database.AppDatabase;
+import com.sdplab.twitterstat.database.Twitt;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,12 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import twitter4j.Query;
-import twitter4j.QueryResult;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
+import java.util.TreeMap;
 
 public class StatisticsActivity extends AppCompatActivity {
 
@@ -42,10 +38,20 @@ public class StatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ThemeChanger.setUpTheme(this);
         setContentView(R.layout.activity_statistics);
-        DbAccessAsyncTask dbat = new DbAccessAsyncTask();
+        DbUsersAsyncTask dbuat = new DbUsersAsyncTask();
         if(!HashtagContainer.getInstance().getTagList().isEmpty()) {
-            dbat.execute();
+            dbuat.execute();
         }
+        else{
+                CharSequence text = "There is not enough data";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(this, text, duration).show();
+        }
+        DbFavTwittsAsyncTask dbftat = new DbFavTwittsAsyncTask();
+        if(!HashtagContainer.getInstance().getTagList().isEmpty()) {
+            dbftat.execute();
+        }
+
     }
 
     @Override
@@ -77,7 +83,7 @@ public class StatisticsActivity extends AppCompatActivity {
         return sortedMap;
     }
 
-    private class DbAccessAsyncTask extends AsyncTask<Void , Void, Map<String,Integer>> {
+    private class DbUsersAsyncTask extends AsyncTask<Void , Void, Map<String,Integer>> {
 
 
         @Override
@@ -96,14 +102,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Map<String,Integer> userFreq) {
-            TextView tvUserfreq = findViewById(R.id.userFreq);
             BarChart barchart = findViewById(R.id.barGraph);
             ArrayList<BarEntry> barEntries= new ArrayList<>();
-
-            for (Map.Entry<String, Integer> entry : userFreq.entrySet())
-            {
-                tvUserfreq.append(entry.getKey() + "/" + entry.getValue()+"\n");
-            }
 
             String[] users = new String[5];
 
@@ -113,7 +113,7 @@ public class StatisticsActivity extends AppCompatActivity {
                     barEntries.add(new BarEntry(i, userFreq.get(userFreq.keySet().toArray()[i])));
                 }
             }catch(ArrayIndexOutOfBoundsException e){
-                CharSequence text = "Hashtag added successfuly";
+                CharSequence text = "There is not enough data";
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(StatisticsActivity.this, text, duration).show();
             }
@@ -128,6 +128,39 @@ public class StatisticsActivity extends AppCompatActivity {
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setGranularity(1);
             xAxis.setDrawGridLines(false);
+
+        }
+
+    }
+
+    private class DbFavTwittsAsyncTask extends AsyncTask<Void , Void, Map<String,Integer>> {
+
+
+        @Override
+        protected  Map<String,Integer> doInBackground(Void...voids) {
+
+            AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
+            List<Twitt> favTwittsList = db.twittDao().getAll();
+            Map<String,Integer> favTwittsMap = new LinkedHashMap<>();
+            for (Twitt t: favTwittsList){
+                favTwittsMap.put(t.getText(), t.getFcount());
+            }
+            return sortMap(favTwittsMap);
+        }
+
+        @Override
+        protected void onPostExecute(Map<String,Integer> favTwitts) {
+            TextView textView = findViewById(R.id.favTwitts);
+
+
+            for (String key: favTwitts.keySet()){
+
+                String twittText = key;
+                String fcount = favTwitts.get(key).toString();
+                textView.append(key + "\n" + "Number of likes: "+fcount+"\n");
+
+
+            }
 
         }
 
