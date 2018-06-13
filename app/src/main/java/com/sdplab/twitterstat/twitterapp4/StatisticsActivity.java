@@ -159,9 +159,7 @@ public class StatisticsActivity extends AppCompatActivity {
                         tv.append("\n");
                     }
                 }catch(ArrayIndexOutOfBoundsException e){
-                    CharSequence text = "There is not enough data";
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast.makeText(StatisticsActivity.this, text, duration).show();
+
                 }
 
 
@@ -199,9 +197,7 @@ public class StatisticsActivity extends AppCompatActivity {
                     tv.append("\n");
                 }
             }catch(ArrayIndexOutOfBoundsException e){
-                CharSequence text = "There is not enough data";
-                int duration = Toast.LENGTH_SHORT;
-                Toast.makeText(StatisticsActivity.this, text, duration).show();
+
             }
 
 
