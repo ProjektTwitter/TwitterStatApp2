@@ -78,7 +78,6 @@ public class TwitterService extends Service {
                 freq = 56800000;
                 break;
         }
-        System.out.println(fSettings);
         startTimer();
         return START_STICKY;
     }

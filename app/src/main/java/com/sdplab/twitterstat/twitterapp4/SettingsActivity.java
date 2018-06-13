@@ -26,7 +26,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         if(SettingsFragment.themeChanged)
-
             recreate();
 
     }

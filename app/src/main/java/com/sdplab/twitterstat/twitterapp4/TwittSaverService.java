@@ -36,6 +36,7 @@ public class TwittSaverService extends Service {
     private Intent tIntent;
     private AppDatabase db;
     private Twitter twitter;
+    private int freq = 900000;
 
     public TwittSaverService() {
 
@@ -49,6 +50,38 @@ public class TwittSaverService extends Service {
         tIntent = intent;
         db = AppDatabase.getAppDatabase(this);
         twitter = (Twitter) tIntent.getSerializableExtra("Twitter");
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String fSettings = sharedPref.getString("list_preference_2", "");
+        switch(fSettings){
+
+            case "15 minutes":
+                freq = 900000;
+                break;
+
+            case "30 minutes":
+                freq = 1800000;
+                break;
+
+            case "1 hour":
+                freq = 3200000;
+                break;
+
+            case "3 hours":
+                freq = 9600000;
+                break;
+
+            case "6 hours":
+                freq = 19200000;
+                break;
+
+            case "12 hours":
+                freq = 28400000;
+                break;
+
+            case "24 hours":
+                freq = 56800000;
+                break;
+        }
         startTimer();
         return START_STICKY;
     }
@@ -117,7 +150,7 @@ public class TwittSaverService extends Service {
 
         initializeTimerTask();
 
-        timer.schedule(timerTask, 1000, 10000); //
+        timer.schedule(timerTask, 1000, freq); //
     }
 
     public void initializeTimerTask() {

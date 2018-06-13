@@ -9,7 +9,6 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static boolean themeChanged = false;
-    public static boolean frequencyChanged = false;
     public static boolean killTwitterService= false;
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -46,7 +45,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 if (TwitterService.isRunning) {
                     getActivity().stopService(intent2);
                 }
-                frequencyChanged = true;
+                break;
+
+            case "list_preference_2":
+                Intent intent3 = new Intent(getActivity(), TwittSaverService.class);
+                if (TwitterService.isRunning) {
+                    getActivity().stopService(intent3);
+                }
                 break;
 
         }
