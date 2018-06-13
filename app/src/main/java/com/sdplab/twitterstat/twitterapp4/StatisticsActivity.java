@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -81,7 +82,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         @Override
         protected  Map<String,Integer> doInBackground(Void...voids) {
-            Twitter twitt = (Twitter) getIntent().getSerializableExtra("Twitter");
+
             AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
             List<String> users = db.twittDao().getUsers();
             Map<String,Integer> userFreq = new LinkedHashMap<>();
@@ -99,18 +100,24 @@ public class StatisticsActivity extends AppCompatActivity {
             BarChart barchart = findViewById(R.id.barGraph);
             ArrayList<BarEntry> barEntries= new ArrayList<>();
 
-
-
-
             for (Map.Entry<String, Integer> entry : userFreq.entrySet())
             {
                 tvUserfreq.append(entry.getKey() + "/" + entry.getValue()+"\n");
             }
+
             String[] users = new String[5];
-            for (int i = 0;i<5;i++){
-                users[i] = (String) userFreq.keySet().toArray()[i];
-                barEntries.add(new BarEntry(i,userFreq.get(userFreq.keySet().toArray()[i])));
+
+            try {
+                for (int i = 0; i < 5; i++) {
+                    users[i] = (String) userFreq.keySet().toArray()[i];
+                    barEntries.add(new BarEntry(i, userFreq.get(userFreq.keySet().toArray()[i])));
+                }
+            }catch(ArrayIndexOutOfBoundsException e){
+                CharSequence text = "Hashtag added successfuly";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(StatisticsActivity.this, text, duration).show();
             }
+
             BarDataSet entriesDataSet = new BarDataSet(barEntries,"Users");
             entriesDataSet.setColors(ColorTemplate.PASTEL_COLORS);
             BarData bd = new BarData (entriesDataSet);
@@ -136,7 +143,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
-            // return the entry's data which represents the label
+
             return mValues[(int)value];
         }
     }

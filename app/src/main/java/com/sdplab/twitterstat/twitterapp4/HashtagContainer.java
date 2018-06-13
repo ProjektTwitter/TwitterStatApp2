@@ -10,6 +10,7 @@ public class HashtagContainer {
 
     private HashtagContainer(){
         tagList = new ArrayList<String>();
+
     }
 
     public static HashtagContainer getInstance(){
