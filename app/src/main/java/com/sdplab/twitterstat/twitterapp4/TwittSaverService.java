@@ -80,15 +80,28 @@ public class TwittSaverService extends Service {
      }
 
     private static void saveToDatabase(AppDatabase db,ArrayList<List<twitter4j.Status>> status) {
+        List<Twitt> cTwittList =db.twittDao().getAll();
         for (List<twitter4j.Status>sl : status) {
             for (twitter4j.Status s : sl) {
-                Twitt twitt = new Twitt();
-                twitt.setUser(s.getUser().getName());
-                twitt.setText(s.getText());
-                twitt.setDate((s.getCreatedAt().toString()));
-                twitt.setFcount(s.getFavoriteCount());
-                twitt.setRcount(s.getRetweetCount());
-                addTwitt(db,twitt);
+                boolean isInBase = false;
+                String user = s.getUser().getName();
+                String text = s.getText();
+                String date = s.getCreatedAt().toString();
+
+                for(Twitt t:cTwittList){
+                    if(t.getUser().equals(user)&&t.getText().equals(text)&&t.getDate().equals(date)){
+                        isInBase = true;
+                    }
+                }
+                if(!isInBase) {
+                    Twitt twitt = new Twitt();
+                    twitt.setUser(user);
+                    twitt.setText(text);
+                    twitt.setDate(date);
+                    twitt.setFcount(s.getFavoriteCount());
+                    twitt.setRcount(s.getRetweetCount());
+                    addTwitt(db, twitt);
+                }
             }
         }
     }

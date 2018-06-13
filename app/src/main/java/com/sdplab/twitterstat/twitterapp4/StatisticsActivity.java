@@ -1,6 +1,5 @@
 package com.sdplab.twitterstat.twitterapp4;
 
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,10 +12,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.ChartData;
-import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.sdplab.twitterstat.database.AppDatabase;
 import com.sdplab.twitterstat.database.Twitt;
@@ -24,12 +20,10 @@ import com.sdplab.twitterstat.database.Twitt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class StatisticsActivity extends AppCompatActivity {
 
@@ -150,17 +144,24 @@ public class StatisticsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Map<String,Integer> favTwitts) {
-            TextView textView = findViewById(R.id.favTwitts);
+            TextView tv = findViewById(R.id.favTwitts);
 
 
-            for (String key: favTwitts.keySet()){
+                try {
+                    for (int i = 0; i < 10; i++) {
+                        String key = (String) favTwitts.keySet().toArray()[i];
+                        int fcount = favTwitts.get(key);
+                        tv.append(key + "\n" + "Number of likes: "+fcount+"\n");
+                        tv.append("\n");
+                    }
+                }catch(ArrayIndexOutOfBoundsException e){
+                    CharSequence text = "There is not enough data";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast.makeText(StatisticsActivity.this, text, duration).show();
+                }
 
-                String twittText = key;
-                String fcount = favTwitts.get(key).toString();
-                textView.append(key + "\n" + "Number of likes: "+fcount+"\n");
 
 
-            }
 
         }
 
