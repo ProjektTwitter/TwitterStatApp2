@@ -32,18 +32,22 @@ public class StatisticsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ThemeChanger.setUpTheme(this);
         setContentView(R.layout.activity_statistics);
-        DbUsersAsyncTask dbuat = new DbUsersAsyncTask();
+        DbUsersAsyncTask dbUsersAsyncTask = new DbUsersAsyncTask();
         if(!HashtagContainer.getInstance().getTagList().isEmpty()) {
-            dbuat.execute();
+            dbUsersAsyncTask.execute();
         }
         else{
                 CharSequence text = "There is not enough data";
                 int duration = Toast.LENGTH_SHORT;
                 Toast.makeText(this, text, duration).show();
         }
-        DbFavTwittsAsyncTask dbftat = new DbFavTwittsAsyncTask();
+        DbFavTwittsAsyncTask dbFavTwittsAsyncTask = new DbFavTwittsAsyncTask();
         if(!HashtagContainer.getInstance().getTagList().isEmpty()) {
-            dbftat.execute();
+            dbFavTwittsAsyncTask.execute();
+        }
+        DbRetTwittsAsyncTask dbRetTwittsAsyncTask1 = new DbRetTwittsAsyncTask();
+        if(!HashtagContainer.getInstance().getTagList().isEmpty()) {
+            dbRetTwittsAsyncTask1.execute();
         }
 
     }
@@ -159,6 +163,46 @@ public class StatisticsActivity extends AppCompatActivity {
                     int duration = Toast.LENGTH_SHORT;
                     Toast.makeText(StatisticsActivity.this, text, duration).show();
                 }
+
+
+
+
+        }
+
+    }
+
+    private class DbRetTwittsAsyncTask extends AsyncTask<Void , Void, Map<String,Integer>> {
+
+
+        @Override
+        protected  Map<String,Integer> doInBackground(Void...voids) {
+
+            AppDatabase db = AppDatabase.getAppDatabase(getApplicationContext());
+            List<Twitt> favTwittsList = db.twittDao().getAll();
+            Map<String,Integer> retTwittsMap = new LinkedHashMap<>();
+            for (Twitt t: favTwittsList){
+                retTwittsMap.put(t.getText(), t.getRcount());
+            }
+            return sortMap(retTwittsMap);
+        }
+
+        @Override
+        protected void onPostExecute(Map<String,Integer> retTwitts) {
+            TextView tv = findViewById(R.id.retTwitts);
+
+
+            try {
+                for (int i = 0; i < 10; i++) {
+                    String key = (String) retTwitts.keySet().toArray()[i];
+                    int fcount = retTwitts.get(key);
+                    tv.append(key + "\n" + "Number of retwitts: "+fcount+"\n");
+                    tv.append("\n");
+                }
+            }catch(ArrayIndexOutOfBoundsException e){
+                CharSequence text = "There is not enough data";
+                int duration = Toast.LENGTH_SHORT;
+                Toast.makeText(StatisticsActivity.this, text, duration).show();
+            }
 
 
 
