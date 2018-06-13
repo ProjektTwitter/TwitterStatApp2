@@ -137,10 +137,15 @@ public class TwittSaverService extends Service {
         }
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        stoptimertask();
+
+            Intent broadcastIntent = new Intent(".TwittSaverServiceRestarterBroadcastReceiver");
+            sendBroadcast(broadcastIntent);
+            stoptimertask();
+
     }
 
 }

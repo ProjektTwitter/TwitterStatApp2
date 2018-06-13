@@ -34,6 +34,16 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".TwittSaverServiceRestarterBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped">
+            <intent-filter>
+                <action android:name=".TwittSaverServiceRestarterBroadcastReceiver" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".TwitterService"
             android:enabled="true"

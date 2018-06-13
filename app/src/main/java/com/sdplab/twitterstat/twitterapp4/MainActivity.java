@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static Twitter twitt;
     private static final String TAG = "mainActivity";
-    Intent mServiceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +111,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void onDestroy() {
         super.onDestroy();
-        mServiceIntent = new Intent(this, TwitterService.class);
+        Intent i1 = new Intent(this, TwitterService.class);
         if (TwitterService.isRunning) {
-            stopService(mServiceIntent);
+            stopService(i1);
         }
+        Intent i2 = new Intent(this, TwitterService.class);
+        if (TwitterService.isRunning) {
+            stopService(i1);
+        }
+
+
     }
 
 
